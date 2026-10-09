@@ -1,0 +1,142 @@
+table 'dw dim_asesor'
+	lineageTag: 94882190-d06f-4d1b-b110-921d2df796c3
+
+	column sk_asesor
+		dataType: int64
+		formatString: 0
+		lineageTag: bc4ff42c-6889-4ba4-bc8d-dce4d8b29fdc
+		summarizeBy: none
+		sourceColumn: sk_asesor
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_asesor
+		dataType: string
+		lineageTag: 4abdf967-7534-4457-8c58-0d7507a1ce70
+		summarizeBy: none
+		sourceColumn: id_asesor
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre
+		dataType: string
+		lineageTag: 27a4ec77-f3f8-4cfb-8a6b-29b8a5fa8eb1
+		summarizeBy: none
+		sourceColumn: nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column region
+		dataType: string
+		lineageTag: bf9a1284-df7f-45d3-820d-17ecd700fbfb
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	column oficina
+		dataType: string
+		lineageTag: 55d8e034-077f-4cd7-ba54-38ddfb870e28
+		summarizeBy: none
+		sourceColumn: oficina
+
+		annotation SummarizationSetBy = Automatic
+
+	column puesto
+		dataType: string
+		lineageTag: 3f1491e3-c3e5-4e24-8f7c-d973f8fedf19
+		summarizeBy: none
+		sourceColumn: puesto
+
+		annotation SummarizationSetBy = Automatic
+
+	column cargo
+		dataType: string
+		lineageTag: 57483823-d8b7-437a-b93a-89fc60bc0595
+		summarizeBy: none
+		sourceColumn: cargo
+
+		annotation SummarizationSetBy = Automatic
+
+	column estado
+		dataType: string
+		lineageTag: cdd81adc-5c02-4758-b3fc-ad129e12b82f
+		summarizeBy: none
+		sourceColumn: estado
+
+		annotation SummarizationSetBy = Automatic
+
+	column desde
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9853888b-e1a4-4100-b84d-e076a2436e9c
+		summarizeBy: none
+		sourceColumn: desde
+
+		variation Variación
+			isDefault
+			relationship: cfef620b-3371-4d0d-8703-c2e885a50730
+			defaultHierarchy: LocalDateTable_c49c1b96-c081-4e83-a348-5677e552d8a0.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column hasta
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: afeafaaf-8e23-491f-a78b-cdb53fbc5e94
+		summarizeBy: none
+		sourceColumn: hasta
+
+		variation Variación
+			isDefault
+			relationship: a5e5ca72-c199-437a-8b1f-51a5dbd8d2b2
+			defaultHierarchy: LocalDateTable_1f16e8bd-6be0-449b-ac36-1fadb8d2f4ef.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column vigente
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 6e5e94dc-7c0c-49f4-9ab7-58649a9f5520
+		summarizeBy: none
+		sourceColumn: vigente
+
+		annotation SummarizationSetBy = Automatic
+
+	column _hash
+		dataType: string
+		lineageTag: 80abf610-4d3d-4ba5-a956-f50ffd9ef976
+		summarizeBy: none
+		sourceColumn: _hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column _cargado_en
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: cdb9539a-c85e-42ed-bd82-5ea66016a740
+		summarizeBy: none
+		sourceColumn: _cargado_en
+
+		variation Variación
+			isDefault
+			relationship: 40f7c6d8-8a53-4d93-953a-a4e331dae412
+			defaultHierarchy: LocalDateTable_a0b88f2d-cce6-4f53-972c-6da6f402ac26.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dw dim_asesor' = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost:5433", "wh_creditos"),
+				    dw_dim_asesor = Origen{[Schema="dw",Item="dim_asesor"]}[Data]
+				in
+				    dw_dim_asesor
+
+	annotation PBI_ResultType = Table
+

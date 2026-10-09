@@ -1,0 +1,202 @@
+table 'dw fact_gestion'
+	lineageTag: 96d8e239-229f-461e-b370-8b25fbfdf266
+
+	column sk_gestion
+		dataType: int64
+		formatString: 0
+		lineageTag: c42a0a79-8b3d-49e1-992f-100c4dee65a6
+		summarizeBy: sum
+		sourceColumn: sk_gestion
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_gestion
+		dataType: int64
+		formatString: 0
+		lineageTag: 7e354f15-822d-48a7-9fc1-a3f00f5d4d7a
+		summarizeBy: sum
+		sourceColumn: id_gestion
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_tiempo
+		dataType: int64
+		formatString: 0
+		lineageTag: af84a9b6-b039-43d1-b358-a98e9d9c9f37
+		summarizeBy: none
+		sourceColumn: sk_tiempo
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_cliente
+		dataType: int64
+		formatString: 0
+		lineageTag: 71bb90e1-f768-47cb-ac25-32c6e85135bf
+		summarizeBy: none
+		sourceColumn: sk_cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_asesor
+		dataType: int64
+		formatString: 0
+		lineageTag: f428d704-c3d7-44c5-81e0-c45ec401da1a
+		summarizeBy: none
+		sourceColumn: sk_asesor
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_producto
+		dataType: int64
+		formatString: 0
+		lineageTag: 851a5f73-2c85-4678-a5ce-7f89a215d422
+		summarizeBy: none
+		sourceColumn: sk_producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_oficina
+		dataType: int64
+		formatString: 0
+		lineageTag: e14dd5a3-ce1c-4395-bfbb-953e6af840ab
+		summarizeBy: none
+		sourceColumn: sk_oficina
+
+		annotation SummarizationSetBy = Automatic
+
+	column resultado
+		dataType: string
+		lineageTag: 03f249c3-b138-4696-b7a8-a2b5ea733b87
+		summarizeBy: none
+		sourceColumn: resultado
+
+		annotation SummarizationSetBy = Automatic
+
+	column canal_contacto
+		dataType: string
+		lineageTag: 3f0c3916-9c39-40cc-a202-d116e399e85b
+		summarizeBy: none
+		sourceColumn: canal_contacto
+
+		annotation SummarizationSetBy = Automatic
+
+	column gestiones
+		dataType: int64
+		formatString: 0
+		lineageTag: 036f6cf2-f604-4f55-b55b-ad3191ad17b6
+		summarizeBy: sum
+		sourceColumn: gestiones
+
+		annotation SummarizationSetBy = Automatic
+
+	column duracion_seg
+		dataType: int64
+		formatString: 0
+		lineageTag: 73291eba-f927-4605-88e1-7f4ec4f411bc
+		summarizeBy: sum
+		sourceColumn: duracion_seg
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_desembolso
+		dataType: int64
+		formatString: 0
+		lineageTag: fd4bedb3-7874-4586-909d-75021a1a3dc0
+		summarizeBy: sum
+		sourceColumn: es_desembolso
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_rechazo
+		dataType: int64
+		formatString: 0
+		lineageTag: 02b32d19-48c3-46d2-b41c-158c3532b8a4
+		summarizeBy: sum
+		sourceColumn: es_rechazo
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_contacto
+		dataType: int64
+		formatString: 0
+		lineageTag: b227cc39-8940-4ada-8c24-9a49644e8e8e
+		summarizeBy: sum
+		sourceColumn: es_contacto
+
+		annotation SummarizationSetBy = Automatic
+
+	column _cargado_en
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e91f6b41-1d35-4443-a684-821097a5fc60
+		summarizeBy: none
+		sourceColumn: _cargado_en
+
+		variation Variación
+			isDefault
+			relationship: ac0870df-ff79-45e0-99f1-8ffeb6d82954
+			defaultHierarchy: LocalDateTable_246bac9e-b759-4552-8404-e7b4b175646b.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'Total gestiones' = SUM('dw fact_gestion'[gestiones])
+		formatString: #,##0
+		displayFolder: 01 Volumen
+		lineageTag: 5728d286-c165-4840-900a-95df1ec58275
+
+	measure 'Contactos efectivos' = SUM('dw fact_gestion'[es_contacto])
+		formatString: #,##0
+		displayFolder: 01 Volumen
+		lineageTag: cefc935d-7a83-4bee-898e-98828c0d4305
+
+	measure 'Cierres' = SUM('dw fact_gestion'[es_desembolso])
+		formatString: #,##0
+		displayFolder: 01 Volumen
+		lineageTag: e1044568-2dfc-412c-bcb5-10d11dab01f3
+
+	measure 'Rechazos' = SUM('dw fact_gestion'[es_rechazo])
+		formatString: #,##0
+		displayFolder: 01 Volumen
+		lineageTag: dc6526d9-a8ad-4972-93ab-7a6b8ca0f2ed
+
+	measure 'Leads trabajados' = DISTINCTCOUNT('dw fact_gestion'[sk_cliente])
+		formatString: #,##0
+		displayFolder: 01 Volumen
+		lineageTag: a88959a0-1c82-462e-8cb3-61c86181c7dc
+
+	measure 'Tasa de cierre' = DIVIDE([Cierres], [Total gestiones])
+		formatString: 0.0%
+		displayFolder: 02 Efectividad
+		lineageTag: b2d59c98-e42c-4eb1-b29a-7fc983ee4397
+
+	measure 'Contactabilidad' = DIVIDE([Contactos efectivos], [Total gestiones])
+		formatString: 0.0%
+		displayFolder: 02 Efectividad
+		lineageTag: 2f84d162-d85d-46df-ad43-839e233eec1a
+
+	measure 'Tasa de rechazo' = DIVIDE([Rechazos], [Contactos efectivos])
+		formatString: 0.0%
+		displayFolder: 02 Efectividad
+		lineageTag: 2d59549b-7cca-448c-adab-9d7a5dbf282d
+
+	measure 'Gestiones por cierre' = DIVIDE([Total gestiones], [Cierres])
+		formatString: #,##0.0
+		displayFolder: 02 Efectividad
+		lineageTag: d9c2b099-7727-480a-a9f1-b419e922c90a
+
+	measure 'Duracion promedio min' = DIVIDE(AVERAGE('dw fact_gestion'[duracion_seg]), 60)
+		formatString: #,##0.0
+		displayFolder: 02 Efectividad
+		lineageTag: 966c65d5-ef5c-42bf-812e-424bf833be08
+
+	partition 'dw fact_gestion' = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost:5433", "wh_creditos"),
+				    dw_fact_gestion = Origen{[Schema="dw",Item="fact_gestion"]}[Data]
+				in
+				    dw_fact_gestion
+
+	annotation PBI_ResultType = Table
+

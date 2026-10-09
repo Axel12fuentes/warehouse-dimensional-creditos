@@ -106,6 +106,29 @@ BEGIN
   SELECT count(*) = 0 INTO v_primera
   FROM dw.dim_asesor WHERE sk_asesor <> -1;
 
+  -- PASO 0 · cambios ocurridos EL MISMO DIA en que nacio la version
+  --
+  -- No son una version nueva: son una correccion. Si se cerraran con
+  -- hasta = ayer quedaria un rango imposible (hasta anterior a desde) y
+  -- ninguna fila de hechos podria caer en el. Se actualizan en el sitio.
+  WITH origen AS (
+    SELECT id_asesor, nombre, region, oficina, puesto, cargo, estado,
+           md5(coalesce(nombre,'')||'|'||coalesce(region,'')||'|'||
+               coalesce(oficina,'')||'|'||coalesce(puesto,'')||'|'||
+               coalesce(cargo,'')||'|'||coalesce(estado,'')) AS h
+    FROM staging.stg_personal
+  )
+  UPDATE dw.dim_asesor d
+     SET nombre = o.nombre, region = o.region, oficina = o.oficina,
+         puesto = o.puesto, cargo = o.cargo, estado = o.estado,
+         _hash = o.h, _cargado_en = now()
+    FROM origen o
+   WHERE d.id_asesor = o.id_asesor
+     AND d.vigente
+     AND d.sk_asesor <> -1
+     AND d.desde = current_date          -- nacio hoy
+     AND d._hash IS DISTINCT FROM o.h;
+
   -- PASO 1 · cerrar las versiones vigentes cuyo atributo vigilado cambio
   WITH origen AS (
     SELECT id_asesor,
@@ -139,6 +162,14 @@ BEGIN
          ON d.id_asesor = s.id_asesor AND d.vigente
   WHERE d.id_asesor IS NULL;
   GET DIAGNOSTICS v_nuevas = ROW_COUNT;
+
+  -- PASO 3 · barrer rangos imposibles que haya dejado una carga anterior.
+  -- Son versiones que nunca estuvieron vigentes ni un dia, asi que ningun
+  -- hecho puede apuntar a ellas.
+  DELETE FROM dw.dim_asesor d
+   WHERE d.hasta < d.desde
+     AND NOT EXISTS (SELECT 1 FROM dw.fact_gestion f    WHERE f.sk_asesor = d.sk_asesor)
+     AND NOT EXISTS (SELECT 1 FROM dw.fact_desembolso f WHERE f.sk_asesor = d.sk_asesor);
 
   RAISE NOTICE 'dim_asesor: % version(es) cerrada(s), % nueva(s)', v_cerradas, v_nuevas;
 END;

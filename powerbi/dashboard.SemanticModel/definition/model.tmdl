@@ -1,0 +1,35 @@
+model Model
+	culture: es-PE
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-PE
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["dw dim_tiempo","dw dim_asesor","dw dim_cliente","dw dim_producto","dw dim_oficina","dw fact_gestion","dw fact_desembolso"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'dw dim_tiempo'
+ref table DateTableTemplate_41f79b73-3251-4e7e-a2dd-8c2eaac2f980
+ref table LocalDateTable_866ff354-1e20-4c89-b745-91e100c15463
+ref table 'dw dim_asesor'
+ref table LocalDateTable_c49c1b96-c081-4e83-a348-5677e552d8a0
+ref table LocalDateTable_1f16e8bd-6be0-449b-ac36-1fadb8d2f4ef
+ref table LocalDateTable_a0b88f2d-cce6-4f53-972c-6da6f402ac26
+ref table 'dw dim_cliente'
+ref table LocalDateTable_5e6f0a38-087b-47da-ab84-00b1f68942c4
+ref table 'dw dim_producto'
+ref table LocalDateTable_34d780a8-2ad3-4017-b28f-82c1b090bf0f
+ref table 'dw dim_oficina'
+ref table LocalDateTable_054eed13-e674-4680-b5fd-ffd487be6eda
+ref table 'dw fact_gestion'
+ref table LocalDateTable_246bac9e-b759-4552-8404-e7b4b175646b
+ref table 'dw fact_desembolso'
+ref table LocalDateTable_d74a619d-ee45-4b1a-ad1c-4f60a204d7cf
+
+ref cultureInfo es-PE
+

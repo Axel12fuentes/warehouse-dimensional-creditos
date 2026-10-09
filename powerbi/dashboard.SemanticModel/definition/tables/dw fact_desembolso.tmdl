@@ -1,0 +1,202 @@
+table 'dw fact_desembolso'
+	lineageTag: 439dbd1c-3b7c-4800-b67f-59ae5d21666e
+
+	column sk_desembolso
+		dataType: int64
+		formatString: 0
+		lineageTag: 7c497e43-12c6-432a-937d-6349132a3f8a
+		summarizeBy: sum
+		sourceColumn: sk_desembolso
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_desembolso
+		dataType: int64
+		formatString: 0
+		lineageTag: 815c1aaa-680a-42fe-84d8-0571beadff76
+		summarizeBy: sum
+		sourceColumn: id_desembolso
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_tiempo
+		dataType: int64
+		formatString: 0
+		lineageTag: fc667eee-80c1-42bf-841a-6c3e991f9ec5
+		summarizeBy: none
+		sourceColumn: sk_tiempo
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_cliente
+		dataType: int64
+		formatString: 0
+		lineageTag: 843a7b36-4b75-4cfe-929b-919fe99730b5
+		summarizeBy: none
+		sourceColumn: sk_cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_asesor
+		dataType: int64
+		formatString: 0
+		lineageTag: b14cc11f-d1b1-4950-8051-b935ac410576
+		summarizeBy: none
+		sourceColumn: sk_asesor
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_producto
+		dataType: int64
+		formatString: 0
+		lineageTag: ba2a5c2f-271c-400c-86b2-a1dfef41a131
+		summarizeBy: none
+		sourceColumn: sk_producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_oficina
+		dataType: int64
+		formatString: 0
+		lineageTag: 919181f4-3e94-41ec-8dcc-382c88f13aaf
+		summarizeBy: none
+		sourceColumn: sk_oficina
+
+		annotation SummarizationSetBy = Automatic
+
+	column moneda
+		dataType: string
+		lineageTag: 441b0b1c-f182-4ef1-8ddb-3b7e64e609e0
+		summarizeBy: none
+		sourceColumn: moneda
+
+		annotation SummarizationSetBy = Automatic
+
+	column desembolsos
+		dataType: int64
+		formatString: 0
+		lineageTag: 51c40a29-8ad1-49b9-8230-e1adecfbb19f
+		summarizeBy: sum
+		sourceColumn: desembolsos
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto
+		dataType: double
+		lineageTag: 89bcfaec-7e67-40c3-8a5a-f23ca4bd58fd
+		summarizeBy: sum
+		sourceColumn: monto
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column monto_pen
+		dataType: double
+		lineageTag: 540be741-2418-4600-a434-e2344e926c70
+		summarizeBy: sum
+		sourceColumn: monto_pen
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column monto_aprobado
+		dataType: double
+		lineageTag: e6db6724-12be-4545-88ff-73bbad27fd6d
+		summarizeBy: sum
+		sourceColumn: monto_aprobado
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column plazo_meses
+		dataType: int64
+		formatString: 0
+		lineageTag: 17ea8015-adea-4e7b-8d32-8de6986772c4
+		summarizeBy: sum
+		sourceColumn: plazo_meses
+
+		annotation SummarizationSetBy = Automatic
+
+	column tasa_anual
+		dataType: double
+		lineageTag: 838f50bd-e8c5-4e59-96c7-3c6a2f6cce4d
+		summarizeBy: sum
+		sourceColumn: tasa_anual
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column _cargado_en
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 20812f0a-180a-4458-b5bd-23cd07d7048c
+		summarizeBy: none
+		sourceColumn: _cargado_en
+
+		variation Variación
+			isDefault
+			relationship: 10f415bc-5159-451f-9acb-b4ee391319be
+			defaultHierarchy: LocalDateTable_d74a619d-ee45-4b1a-ad1c-4f60a204d7cf.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'Total desembolsos' = SUM('dw fact_desembolso'[desembolsos])
+		formatString: #,##0
+		displayFolder: 03 Colocacion
+		lineageTag: badb489b-59e5-4e34-9655-e30103a375f0
+
+	measure 'Monto colocado' = SUM('dw fact_desembolso'[monto_pen])
+		formatString: "S/ "#,##0
+		displayFolder: 03 Colocacion
+		lineageTag: cc7b1b33-2031-46e6-b559-db8fcbfab7fb
+
+	measure 'Monto aprobado' = SUM('dw fact_desembolso'[monto_aprobado])
+		formatString: "S/ "#,##0
+		displayFolder: 03 Colocacion
+		lineageTag: 9d6bc2fb-2810-4267-b8f1-a605abfcbb84
+
+	measure 'Ticket promedio' = DIVIDE([Monto colocado], [Total desembolsos])
+		formatString: "S/ "#,##0
+		displayFolder: 03 Colocacion
+		lineageTag: c3ce79f9-fc79-4c5a-9172-51764935602e
+
+	measure 'Tasa de utilizacion' = DIVIDE([Monto colocado], [Monto aprobado])
+		formatString: 0.0%
+		displayFolder: 03 Colocacion
+		lineageTag: b7bafada-e190-41d4-8a44-d06630c760f5
+
+	measure 'Plazo promedio meses' = AVERAGE('dw fact_desembolso'[plazo_meses])
+		formatString: #,##0.0
+		displayFolder: 03 Colocacion
+		lineageTag: c5ee8696-e614-4779-8048-be8b1ccf1489
+
+	measure 'Monto colocado YTD' = TOTALYTD([Monto colocado], 'dw dim_tiempo'[fecha])
+		formatString: "S/ "#,##0
+		displayFolder: 04 Tiempo
+		lineageTag: 9f413613-82c5-4a61-b8e4-56ffb0fb9d75
+
+	measure 'Monto mes anterior' = CALCULATE([Monto colocado], DATEADD('dw dim_tiempo'[fecha], -1, MONTH))
+		formatString: "S/ "#,##0
+		displayFolder: 04 Tiempo
+		lineageTag: 6d50f11b-46d6-4e63-895c-79f7244aa05b
+
+	measure 'Variacion vs mes anterior' = DIVIDE([Monto colocado] - [Monto mes anterior], [Monto mes anterior])
+		formatString: 0.0%
+		displayFolder: 04 Tiempo
+		lineageTag: f5c1bbda-f1c8-488e-99c2-33709faa0c92
+
+	partition 'dw fact_desembolso' = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost:5433", "wh_creditos"),
+				    dw_fact_desembolso = Origen{[Schema="dw",Item="fact_desembolso"]}[Data]
+				in
+				    dw_fact_desembolso
+
+	annotation PBI_ResultType = Table
+

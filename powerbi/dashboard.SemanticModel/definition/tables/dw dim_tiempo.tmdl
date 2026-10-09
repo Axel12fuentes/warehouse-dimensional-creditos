@@ -1,0 +1,117 @@
+table 'dw dim_tiempo'
+	lineageTag: 7da15f55-42b1-4cb5-b8d1-a8ff750e70f1
+
+	column sk_tiempo
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b2001b2-376a-45d1-a99a-b94d4ab7e430
+		summarizeBy: none
+		sourceColumn: sk_tiempo
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 52e209b9-2d3f-4220-8d7a-7338c322ce62
+		summarizeBy: none
+		sourceColumn: fecha
+
+		variation Variación
+			isDefault
+			relationship: 5cb6e09c-0bc1-4dab-b958-b993509e1c94
+			defaultHierarchy: LocalDateTable_866ff354-1e20-4c89-b745-91e100c15463.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column anio
+		dataType: int64
+		formatString: 0
+		lineageTag: 517489d6-b39b-496c-9f80-6dc3c6caae59
+		summarizeBy: sum
+		sourceColumn: anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: b0c8b75c-df78-4158-a781-a21743edebe4
+		summarizeBy: sum
+		sourceColumn: trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes
+		dataType: int64
+		formatString: 0
+		lineageTag: 3cf1ada2-68fc-4534-8da0-e578af072021
+		summarizeBy: sum
+		sourceColumn: mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_mes
+		dataType: string
+		lineageTag: d5b8de89-5d9f-4784-a699-ea9de0553c7e
+		summarizeBy: none
+		sourceColumn: nombre_mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column dia
+		dataType: int64
+		formatString: 0
+		lineageTag: f740416a-4d9b-4e43-a555-ec429ea3bb06
+		summarizeBy: sum
+		sourceColumn: dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column dia_semana
+		dataType: int64
+		formatString: 0
+		lineageTag: f71b07f5-a73d-49cf-b3a9-786dc0b91cfb
+		summarizeBy: sum
+		sourceColumn: dia_semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_dia
+		dataType: string
+		lineageTag: 8fa56f9d-f014-495b-aeeb-af5c919d12a3
+		summarizeBy: none
+		sourceColumn: nombre_dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_fin_semana
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: b6cddd66-37c8-43cd-88db-aa9d14632c8e
+		summarizeBy: none
+		sourceColumn: es_fin_semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column anio_mes
+		dataType: string
+		lineageTag: 3029f6a7-e9a9-4145-8009-12fa47e835d1
+		summarizeBy: none
+		sourceColumn: anio_mes
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dw dim_tiempo' = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost:5433", "wh_creditos"),
+				    dw_dim_tiempo = Origen{[Schema="dw",Item="dim_tiempo"]}[Data]
+				in
+				    dw_dim_tiempo
+
+	annotation PBI_ResultType = Table
+

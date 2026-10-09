@@ -1,0 +1,119 @@
+table 'dw dim_cliente'
+	lineageTag: 32fa7080-295a-4172-a6f8-ebb25f420e25
+
+	column sk_cliente
+		dataType: int64
+		formatString: 0
+		lineageTag: 2c43f644-32bb-4584-8644-9aa8958a3038
+		summarizeBy: none
+		sourceColumn: sk_cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_lead
+		dataType: string
+		lineageTag: aa682677-ac1d-4fc5-9f86-258d4393349b
+		summarizeBy: none
+		sourceColumn: id_lead
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_cliente
+		dataType: string
+		lineageTag: c20ac5ef-faa4-468b-a5a1-7867ccf8df22
+		summarizeBy: none
+		sourceColumn: nombre_cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column documento
+		dataType: string
+		lineageTag: 3f6b8e91-ab68-4c8d-a015-40333e6ba077
+		summarizeBy: none
+		sourceColumn: documento
+
+		annotation SummarizationSetBy = Automatic
+
+	column telefono
+		dataType: string
+		lineageTag: ce025dd0-c2ab-4a34-89e7-350a62bba6c5
+		summarizeBy: none
+		sourceColumn: telefono
+
+		annotation SummarizationSetBy = Automatic
+
+	column distrito
+		dataType: string
+		lineageTag: 6023248a-0751-4105-b644-09876b0cb694
+		summarizeBy: none
+		sourceColumn: distrito
+
+		annotation SummarizationSetBy = Automatic
+
+	column canal
+		dataType: string
+		lineageTag: c2968b0a-e8ac-4913-b724-21c947fed411
+		summarizeBy: none
+		sourceColumn: canal
+
+		annotation SummarizationSetBy = Automatic
+
+	column score_riesgo
+		dataType: int64
+		formatString: 0
+		lineageTag: cb905d9e-701f-43a9-a640-3d59fec418b0
+		summarizeBy: sum
+		sourceColumn: score_riesgo
+
+		annotation SummarizationSetBy = Automatic
+
+	column tramo_score
+		dataType: string
+		lineageTag: 2fd56f5c-a75c-4863-b6ea-a9517d3f58f1
+		summarizeBy: none
+		sourceColumn: tramo_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column prioridad
+		dataType: int64
+		formatString: 0
+		lineageTag: e8eaa2c5-a0a4-4d8c-a0f5-cd2e643cff82
+		summarizeBy: sum
+		sourceColumn: prioridad
+
+		annotation SummarizationSetBy = Automatic
+
+	column _hash
+		dataType: string
+		lineageTag: 44a1c101-7b66-4a3d-8554-13453dc61d83
+		summarizeBy: none
+		sourceColumn: _hash
+
+		annotation SummarizationSetBy = Automatic
+
+	column _cargado_en
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: edc01d3c-5f1e-4b78-bad8-bca62c48607d
+		summarizeBy: none
+		sourceColumn: _cargado_en
+
+		variation Variación
+			isDefault
+			relationship: 6345acfb-ea8e-4121-bfba-11c2669e177f
+			defaultHierarchy: LocalDateTable_5e6f0a38-087b-47da-ab84-00b1f68942c4.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dw dim_cliente' = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost:5433", "wh_creditos"),
+				    dw_dim_cliente = Origen{[Schema="dw",Item="dim_cliente"]}[Data]
+				in
+				    dw_dim_cliente
+
+	annotation PBI_ResultType = Table
+

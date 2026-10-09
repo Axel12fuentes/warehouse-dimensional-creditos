@@ -1,0 +1,53 @@
+table 'dw dim_oficina'
+	lineageTag: 0c0b8f99-9d03-4466-a9d7-adff38b43b78
+
+	column sk_oficina
+		dataType: int64
+		formatString: 0
+		lineageTag: a5a8ccfa-1971-43b9-912b-136829c30ab3
+		summarizeBy: none
+		sourceColumn: sk_oficina
+
+		annotation SummarizationSetBy = Automatic
+
+	column oficina
+		dataType: string
+		lineageTag: c92b509b-dd66-432f-87cd-9a1af3c0dcb1
+		summarizeBy: none
+		sourceColumn: oficina
+
+		annotation SummarizationSetBy = Automatic
+
+	column region
+		dataType: string
+		lineageTag: 24866ad2-ecff-4523-8327-e7a705ec1df1
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	column _cargado_en
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 86042cb4-273e-415f-a2ea-08f85f7bc95f
+		summarizeBy: none
+		sourceColumn: _cargado_en
+
+		variation Variación
+			isDefault
+			relationship: 4bc96bc5-677e-474a-9ae5-c070615ab3bc
+			defaultHierarchy: LocalDateTable_054eed13-e674-4680-b5fd-ffd487be6eda.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dw dim_oficina' = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost:5433", "wh_creditos"),
+				    dw_dim_oficina = Origen{[Schema="dw",Item="dim_oficina"]}[Data]
+				in
+				    dw_dim_oficina
+
+	annotation PBI_ResultType = Table
+

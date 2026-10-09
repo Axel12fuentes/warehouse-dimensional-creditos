@@ -1,0 +1,53 @@
+table 'dw dim_producto'
+	lineageTag: 3d7df1e5-4fd8-4124-a6f8-76c1031bbf7d
+
+	column sk_producto
+		dataType: int64
+		formatString: 0
+		lineageTag: fee5fee9-6e7a-4fb8-9f74-75943a919553
+		summarizeBy: none
+		sourceColumn: sk_producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column producto
+		dataType: string
+		lineageTag: 1f0249e2-8ffe-4a84-a98a-d4db04b21e5b
+		summarizeBy: none
+		sourceColumn: producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column familia
+		dataType: string
+		lineageTag: e3cf0ae9-4326-4557-9618-8bffe36dc443
+		summarizeBy: none
+		sourceColumn: familia
+
+		annotation SummarizationSetBy = Automatic
+
+	column _cargado_en
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 310f01a1-548d-479d-b73d-03412aa220a9
+		summarizeBy: none
+		sourceColumn: _cargado_en
+
+		variation Variación
+			isDefault
+			relationship: 3c67552a-39b6-4f0f-b10b-21808e904180
+			defaultHierarchy: LocalDateTable_34d780a8-2ad3-4017-b28f-82c1b090bf0f.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dw dim_producto' = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost:5433", "wh_creditos"),
+				    dw_dim_producto = Origen{[Schema="dw",Item="dim_producto"]}[Data]
+				in
+				    dw_dim_producto
+
+	annotation PBI_ResultType = Table
+

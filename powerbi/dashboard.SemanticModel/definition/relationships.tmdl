@@ -1,0 +1,106 @@
+relationship 5cb6e09c-0bc1-4dab-b958-b993509e1c94
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'dw dim_tiempo'.fecha
+	toColumn: LocalDateTable_866ff354-1e20-4c89-b745-91e100c15463.Date
+
+relationship cfef620b-3371-4d0d-8703-c2e885a50730
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'dw dim_asesor'.desde
+	toColumn: LocalDateTable_c49c1b96-c081-4e83-a348-5677e552d8a0.Date
+
+relationship a5e5ca72-c199-437a-8b1f-51a5dbd8d2b2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'dw dim_asesor'.hasta
+	toColumn: LocalDateTable_1f16e8bd-6be0-449b-ac36-1fadb8d2f4ef.Date
+
+relationship 40f7c6d8-8a53-4d93-953a-a4e331dae412
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'dw dim_asesor'._cargado_en
+	toColumn: LocalDateTable_a0b88f2d-cce6-4f53-972c-6da6f402ac26.Date
+
+relationship 6345acfb-ea8e-4121-bfba-11c2669e177f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'dw dim_cliente'._cargado_en
+	toColumn: LocalDateTable_5e6f0a38-087b-47da-ab84-00b1f68942c4.Date
+
+relationship 3c67552a-39b6-4f0f-b10b-21808e904180
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'dw dim_producto'._cargado_en
+	toColumn: LocalDateTable_34d780a8-2ad3-4017-b28f-82c1b090bf0f.Date
+
+relationship 4bc96bc5-677e-474a-9ae5-c070615ab3bc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'dw dim_oficina'._cargado_en
+	toColumn: LocalDateTable_054eed13-e674-4680-b5fd-ffd487be6eda.Date
+
+relationship ac0870df-ff79-45e0-99f1-8ffeb6d82954
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'dw fact_gestion'._cargado_en
+	toColumn: LocalDateTable_246bac9e-b759-4552-8404-e7b4b175646b.Date
+
+relationship 10f415bc-5159-451f-9acb-b4ee391319be
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'dw fact_desembolso'._cargado_en
+	toColumn: LocalDateTable_d74a619d-ee45-4b1a-ad1c-4f60a204d7cf.Date
+
+relationship ca4e80d9-5657-46be-8f4a-ac4aa1f467b8
+	fromColumn: 'dw fact_gestion'.sk_tiempo
+	toColumn: 'dw dim_tiempo'.sk_tiempo
+
+	annotation PBI_IsFromSource = FS
+
+relationship 9d82c007-8751-49d9-9dd7-bd1d24923c60
+	fromColumn: 'dw fact_gestion'.sk_asesor
+	toColumn: 'dw dim_asesor'.sk_asesor
+
+	annotation PBI_IsFromSource = FS
+
+relationship c1cc2c70-6bf6-4c3e-9bff-b8658e9eb98c
+	fromColumn: 'dw fact_gestion'.sk_cliente
+	toColumn: 'dw dim_cliente'.sk_cliente
+
+	annotation PBI_IsFromSource = FS
+
+relationship 3da40a4b-2777-4090-bce9-82aa3049638f
+	fromColumn: 'dw fact_gestion'.sk_producto
+	toColumn: 'dw dim_producto'.sk_producto
+
+	annotation PBI_IsFromSource = FS
+
+relationship 80beaeb5-4d25-4f13-b890-be557352855a
+	fromColumn: 'dw fact_gestion'.sk_oficina
+	toColumn: 'dw dim_oficina'.sk_oficina
+
+	annotation PBI_IsFromSource = FS
+
+relationship 50663f66-05d4-4b00-a827-9bb34f23578a
+	fromColumn: 'dw fact_desembolso'.sk_tiempo
+	toColumn: 'dw dim_tiempo'.sk_tiempo
+
+	annotation PBI_IsFromSource = FS
+
+relationship 668df07d-de74-441e-a9d8-73096312df1b
+	fromColumn: 'dw fact_desembolso'.sk_asesor
+	toColumn: 'dw dim_asesor'.sk_asesor
+
+	annotation PBI_IsFromSource = FS
+
+relationship aee23627-3e7b-407d-897e-4ecd2c2d09db
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'dw fact_desembolso'.sk_cliente
+	toColumn: 'dw dim_cliente'.sk_cliente
+
+	annotation PBI_IsFromSource = FS
+
+relationship afca5785-f087-4d10-90ef-27428b237bcd
+	fromColumn: 'dw fact_desembolso'.sk_producto
+	toColumn: 'dw dim_producto'.sk_producto
+
+	annotation PBI_IsFromSource = FS
+
+relationship e7a771b3-6b60-4e58-be69-e400dcbe83b4
+	fromColumn: 'dw fact_desembolso'.sk_oficina
+	toColumn: 'dw dim_oficina'.sk_oficina
+
+	annotation PBI_IsFromSource = FS
+

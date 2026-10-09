@@ -126,3 +126,70 @@ RUN apt-get update \
 ```
 
 Además, `alpine` no trae el paquete: hay que usar la variante Debian.
+
+---
+
+## 5 · SCD tipo 2: el cambio del mismo día dejaba un rango imposible
+
+**El síntoma.**
+
+```
+A-001  Miraflores  desde 2026-10-09  hasta 2026-10-08
+```
+
+La fecha de fin es **anterior** a la de inicio. Una versión que nunca estuvo
+vigente ni un día.
+
+**Por qué.** El paso que cierra una versión escribe `hasta = current_date - 1`.
+Eso es correcto cuando la versión lleva tiempo abierta. Pero si la versión
+**nació hoy** y el atributo vuelve a cambiar hoy, el resultado es un rango
+vacío. Pasó al regenerar el origen y volver a trasladar a los mismos asesores
+el mismo día.
+
+**Por qué importa.** Ninguna fila de hechos puede caer dentro de un rango
+imposible, así que esas filas apuntarían a «Desconocido». Con pocos registros
+no se nota; con 197.000 sí.
+
+**La corrección.** Un paso previo que trata el cambio del mismo día como lo
+que es — una **corrección**, no una versión nueva — y actualiza la fila en el
+sitio:
+
+```sql
+UPDATE dw.dim_asesor d
+   SET oficina = o.oficina, ..., _hash = o.h
+  FROM origen o
+ WHERE d.id_asesor = o.id_asesor
+   AND d.vigente
+   AND d.desde = current_date          -- nacio hoy
+   AND d._hash IS DISTINCT FROM o.h;
+```
+
+Más un barrido que elimina los rangos imposibles que hayan quedado, siempre
+que ningún hecho los referencie.
+
+**Lo que aprendí.** El SCD tipo 2 asume que el tiempo avanza entre cargas. En
+desarrollo, donde se recarga varias veces al día, esa suposición se rompe.
+
+---
+
+## 6 · Una medida no puede llamarse igual que una columna
+
+Al escribir las medidas DAX en el TMDL del proyecto `.pbip`, Power BI se negó
+a abrir:
+
+```
+The 'Gestiones' measure cannot be created because a column with the
+same name already exists.
+```
+
+La tabla tiene la columna `gestiones` y la medida se llamaba `Gestiones`.
+Power BI no distingue mayúsculas. Se renombraron a `Total gestiones` y
+`Total desembolsos`.
+
+**Y un segundo error encima:** el script borraba las medidas por su nombre
+antes de reescribirlas, pero al renombrarlas buscaba los nombres **nuevos**,
+no encontraba los viejos, y quedaron las dos versiones conviviendo. Se agregó
+una lista de nombres obsoletos que también se purgan.
+
+Es la misma clase de error que el de la marca de agua: solo aparece **la
+segunda vez** que se corre el proceso.
