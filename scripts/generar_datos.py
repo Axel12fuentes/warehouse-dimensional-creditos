@@ -189,6 +189,14 @@ def cargar(cur):
                 "operacional.asignaciones, operacional.leads, "
                 "operacional.personal RESTART IDENTITY CASCADE;")
 
+    # Reiniciar el origen obliga a reiniciar staging: los contadores vuelven
+    # a 1 y las marcas de agua apuntan a un pasado que ya no existe.
+    cur.execute("SELECT 1 FROM information_schema.routines "
+                "WHERE routine_schema='staging' AND routine_name='reiniciar'")
+    if cur.fetchone():
+        cur.execute("CALL staging.reiniciar();")
+        print("  staging reiniciado")
+
     personal = generar_personal()
     execute_values(cur,
         "INSERT INTO operacional.personal "
@@ -245,10 +253,16 @@ def trasladar(cur):
 
 
 def main():
+    global N_LEADS
+
     ap = argparse.ArgumentParser()
     ap.add_argument("--traslados", action="store_true",
                     help="solo mover asesores de oficina, sin recargar")
+    ap.add_argument("--leads", type=int, default=N_LEADS,
+                    help="cuantos leads generar (por omision 600). "
+                         "Usa un valor alto para el laboratorio de rendimiento.")
     args = ap.parse_args()
+    N_LEADS = args.leads
 
     with conectar() as con, con.cursor() as cur:
         if args.traslados:

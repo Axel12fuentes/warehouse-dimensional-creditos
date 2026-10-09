@@ -144,9 +144,9 @@ Para borrar todo, volúmenes incluidos: `docker compose down -v`.
 - [x] Capa de staging con marca de agua
 - [x] Dimensiones con SCD tipo 2
 - [x] Tablas de hechos (constelación)
-- [ ] Carga incremental en procedimientos
-- [ ] Programación con pg_cron
-- [ ] Índices y medición de planes de ejecución
+- [x] Carga incremental en procedimientos
+- [x] Programación con pg_cron
+- [x] Índices y medición de planes de ejecución
 - [ ] Diccionario de datos
 - [ ] Tablero en Power BI
 

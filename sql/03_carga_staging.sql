@@ -80,10 +80,18 @@ DECLARE
   v_lote   BIGINT;
   v_filas  INT;
   v_desde  TIMESTAMP;
-  v_hasta  TIMESTAMP := clock_timestamp();
+  v_hasta  TIMESTAMP;
+  v_nueva  TIMESTAMP;
   v_inicio TIMESTAMP := clock_timestamp();
 BEGIN
   v_desde := staging.ultima_marca(p_tabla);
+
+  -- La ventana se cierra en el maximo del ORIGEN, no en la hora del reloj.
+  -- Si se usara clock_timestamp(), un dato con fecha de negocio anterior a
+  -- la ultima corrida no se cargaria nunca.
+  EXECUTE format('SELECT max(registrado_en) FROM operacional.%I', p_tabla)
+    INTO v_hasta;
+  v_hasta := coalesce(v_hasta, v_desde);
 
   INSERT INTO staging.control_carga (proceso, estrategia, estado, inicio)
   VALUES (p_tabla, 'incremental', 'EN CURSO', v_inicio)
@@ -112,6 +120,26 @@ EXCEPTION WHEN OTHERS THEN
      SET estado = 'ERROR', mensaje = SQLERRM, fin = clock_timestamp()
    WHERE id_control = v_lote;
   RAISE;
+END;
+$$;
+
+-- ---------------------------------------------------------------------
+-- REINICIO
+-- ---------------------------------------------------------------------
+-- Cuando el origen se regenera desde cero (solo en desarrollo), staging
+-- queda con filas huerfanas y la marca de agua apunta a un pasado que ya
+-- no existe. Peor: si el origen reinicio sus contadores, los id se repiten
+-- y el MERGE del hecho falla con "cannot affect row a second time".
+--
+-- Un reinicio del origen obliga a un reinicio de staging.
+-- ---------------------------------------------------------------------
+CREATE OR REPLACE PROCEDURE staging.reiniciar()
+LANGUAGE plpgsql AS $$
+BEGIN
+  TRUNCATE staging.stg_personal, staging.stg_leads, staging.stg_asignaciones,
+           staging.stg_gestiones, staging.stg_desembolsos;
+  DELETE FROM staging.control_carga;   -- borra tambien las marcas de agua
+  RAISE NOTICE 'staging reiniciado: tablas vacias y marcas de agua borradas';
 END;
 $$;
 
