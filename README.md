@@ -142,7 +142,7 @@ Para borrar todo, volúmenes incluidos: `docker compose down -v`.
 - [x] Esquema operacional de origen
 - [x] Datos de prueba reproducibles
 - [x] Capa de staging con marca de agua
-- [ ] Dimensiones con SCD tipo 2
+- [x] Dimensiones con SCD tipo 2
 - [ ] Tabla de hechos
 - [ ] Carga incremental en procedimientos
 - [ ] Programación con pg_cron
