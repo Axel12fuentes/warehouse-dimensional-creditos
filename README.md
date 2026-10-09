@@ -4,7 +4,7 @@ Del sistema operacional al modelo estrella: cómo se transforma una base
 normalizada de colocación de créditos en un warehouse que el negocio puede
 consultar sin pedirle nada a un desarrollador.
 
-> **Estado:** en construcción. Ver [avance](#avance).
+> **Estado:** el warehouse funciona de punta a punta. Falta terminar las páginas del tablero.
 
 ---
 
@@ -151,7 +151,8 @@ Para borrar todo, volúmenes incluidos: `docker compose down -v`.
 - [x] Programación con pg_cron
 - [x] Índices y medición de planes de ejecución
 - [x] Diccionario de datos generado desde los metadatos
-- [ ] Tablero en Power BI · [guía](docs/04-powerbi.md)
+- [x] Modelo validado en Power BI · [guía](docs/04-powerbi.md)
+- [ ] Páginas del tablero
 
 ---
 
