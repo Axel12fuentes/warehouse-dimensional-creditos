@@ -143,7 +143,7 @@ Para borrar todo, volúmenes incluidos: `docker compose down -v`.
 - [x] Datos de prueba reproducibles
 - [x] Capa de staging con marca de agua
 - [x] Dimensiones con SCD tipo 2
-- [ ] Tabla de hechos
+- [x] Tablas de hechos (constelación)
 - [ ] Carga incremental en procedimientos
 - [ ] Programación con pg_cron
 - [ ] Índices y medición de planes de ejecución
