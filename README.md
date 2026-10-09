@@ -131,7 +131,8 @@ Para borrar todo, volúmenes incluidos: `docker compose down -v`.
 ├─ sql/                   Los scripts, en orden de ejecución
 ├─ docs/
 │   ├─ 02-diccionario-datos.md    generado desde la base
-│   └─ 03-cuaderno-de-errores.md  lo que fallo y por que
+│   ├─ 03-cuaderno-de-errores.md  lo que fallo y por que
+│   └─ 04-powerbi.md              guia del tablero
 ├─ datos/                 CSV de origen (ignorados por git)
 └─ powerbi/               El tablero final
 ```
@@ -150,7 +151,7 @@ Para borrar todo, volúmenes incluidos: `docker compose down -v`.
 - [x] Programación con pg_cron
 - [x] Índices y medición de planes de ejecución
 - [x] Diccionario de datos generado desde los metadatos
-- [ ] Tablero en Power BI
+- [ ] Tablero en Power BI · [guía](docs/04-powerbi.md)
 
 ---
 
