@@ -141,7 +141,7 @@ Para borrar todo, volúmenes incluidos: `docker compose down -v`.
 - [x] Entorno reproducible con Docker
 - [x] Esquema operacional de origen
 - [x] Datos de prueba reproducibles
-- [ ] Capa de staging
+- [x] Capa de staging con marca de agua
 - [ ] Dimensiones con SCD tipo 2
 - [ ] Tabla de hechos
 - [ ] Carga incremental en procedimientos
