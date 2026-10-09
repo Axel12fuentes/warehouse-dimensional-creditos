@@ -129,7 +129,9 @@ Para borrar todo, volúmenes incluidos: `docker compose down -v`.
 ├─ docker-compose.yml     Postgres + pgAdmin
 ├─ Dockerfile             Postgres 16 con pg_cron
 ├─ sql/                   Los scripts, en orden de ejecución
-├─ docs/                  Modelo, diccionario de datos, cuaderno de errores
+├─ docs/
+│   ├─ 02-diccionario-datos.md    generado desde la base
+│   └─ 03-cuaderno-de-errores.md  lo que fallo y por que
 ├─ datos/                 CSV de origen (ignorados por git)
 └─ powerbi/               El tablero final
 ```
@@ -147,7 +149,7 @@ Para borrar todo, volúmenes incluidos: `docker compose down -v`.
 - [x] Carga incremental en procedimientos
 - [x] Programación con pg_cron
 - [x] Índices y medición de planes de ejecución
-- [ ] Diccionario de datos
+- [x] Diccionario de datos generado desde los metadatos
 - [ ] Tablero en Power BI
 
 ---
