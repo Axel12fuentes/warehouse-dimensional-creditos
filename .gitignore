@@ -1,0 +1,16 @@
+# Nunca subir credenciales
+.env
+*.env
+!.env.example
+
+# Datos pesados y salidas locales
+datos/*.csv
+datos/*.zip
+!datos/.gitkeep
+powerbi/*.pbix
+
+# Sistema
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc

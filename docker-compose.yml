@@ -1,0 +1,44 @@
+services:
+  postgres:
+    build: .                 # usa el Dockerfile: postgres 16 + pg_cron
+    image: wh-creditos-pg:16
+    container_name: wh-creditos-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    command: >
+      postgres
+      -c shared_preload_libraries=pg_cron
+      -c cron.database_name=${POSTGRES_DB}
+    ports:
+      - "5433:5432"          # 5433 en tu maquina, para no chocar con otro Postgres local
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql:/sql:ro        # los scripts quedan montados dentro del contenedor
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: wh-creditos-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - "5050:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - pgadmindata:/var/lib/pgadmin
+
+volumes:
+  pgdata:
+  pgadmindata:
