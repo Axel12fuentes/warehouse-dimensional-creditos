@@ -97,7 +97,24 @@ Esto levanta:
 Después, en orden:
 
 ```bash
+# 1. esquema de origen
 docker exec -it wh-creditos-db psql -U <usuario> -d wh_creditos -f /sql/01_fuente_operacional.sql
+
+# 2. datos de prueba (semilla fija: siempre genera lo mismo)
+python scripts/generar_datos.py
+```
+
+El generador produce **600 leads, 15 asesores en 9 oficinas, ~2.000 gestiones
+y ~120 desembolsos** repartidos entre enero y setiembre de 2026, con una tasa
+de conversión del 20% y S/ 1,8 millones colocados.
+
+Los datos no se versionan: se versiona el generador. Así el repositorio queda
+liviano y cualquiera reproduce exactamente el mismo conjunto.
+
+Para simular un traslado de personal y poner a prueba el SCD tipo 2:
+
+```bash
+python scripts/generar_datos.py --traslados
 ```
 
 Para apagarlo sin perder los datos: `docker compose stop`.
@@ -123,7 +140,7 @@ Para borrar todo, volúmenes incluidos: `docker compose down -v`.
 
 - [x] Entorno reproducible con Docker
 - [x] Esquema operacional de origen
-- [ ] Datos de prueba
+- [x] Datos de prueba reproducibles
 - [ ] Capa de staging
 - [ ] Dimensiones con SCD tipo 2
 - [ ] Tabla de hechos
